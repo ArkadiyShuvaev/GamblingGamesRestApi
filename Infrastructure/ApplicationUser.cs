@@ -2,11 +2,13 @@
 
 namespace GamblingGamesRestApi.Infrastructure;
 
+/// <summary>
+/// Represents a user of the application.
+/// </summary>
 public class ApplicationUser : IdentityUser
 {
     /// <summary>
-    /// Gets or sets the number of points the player has.
-    /// The player has a starting account of 10,000 points and can wager on a prediction that they will either win or lose.
+    /// Gets or sets time when the user was created.
     /// </summary>
-    public int Points { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

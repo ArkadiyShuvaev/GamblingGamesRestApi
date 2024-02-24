@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GamblingGamesRestApi.Contexts;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationIdentityContext : IdentityDbContext<ApplicationUser>
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
+    public ApplicationIdentityContext(DbContextOptions<ApplicationIdentityContext> options) :
         base(options)
     { }
 }

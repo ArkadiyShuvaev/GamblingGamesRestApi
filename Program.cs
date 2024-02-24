@@ -1,5 +1,6 @@
 using GamblingGamesRestApi.Contexts;
 using GamblingGamesRestApi.Infrastructure;
+using GamblingGamesRestApi.Repositories;
 using GamblingGamesRestApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,13 +18,15 @@ addSwagger(builder);
 
 builder.Services.AddControllers();
 
+builder.Services.AddDbContext<ApplicationIdentityContext>(options => options.UseInMemoryDatabase("AppDb"));
+//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=tcp:127.0.0.1,1433;Database=AppDb;User ID=sa;Password=DevSqlS3rv3r$;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;Max Pool Size=500;"));
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("AppDb"));
 //builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=tcp:127.0.0.1,1433;Database=AppDb;User ID=sa;Password=DevSqlS3rv3r$;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;Max Pool Size=500;"));
 
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddEntityFrameworkStores<ApplicationIdentityContext>()
     .AddDefaultTokenProviders();
 
 AddAutentication(builder);
@@ -31,6 +34,7 @@ AddAutentication(builder);
 builder.Services.AddAuthentication().AddBearerToken();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPointRepository, PointRepository>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -43,6 +47,10 @@ app.UseHttpsRedirection();
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+context.Database.EnsureCreated();
 
 app.Run();
 
