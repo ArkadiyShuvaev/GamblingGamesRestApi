@@ -14,4 +14,9 @@ public class BetRequest
     [Required]
     [Range(0, int.MaxValue)]
     public int Points { get; set; }
+
+    public override string ToString()
+    {
+        return $"{nameof(Number)}={Number.ToString()}, {nameof(Points)}={Points.ToString()}";
+    }
 }

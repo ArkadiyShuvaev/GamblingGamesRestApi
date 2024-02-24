@@ -1,4 +1,7 @@
-﻿using GamblingGamesRestApi.Repositories;
+﻿using GamblingGamesRestApi.Exceptions;
+using GamblingGamesRestApi.Models;
+using GamblingGamesRestApi.Repositories;
+using System.ComponentModel.DataAnnotations;
 
 namespace GamblingGamesRestApi.Services;
 
@@ -17,8 +20,15 @@ public class BetService : IBetService
         _logger = logger;
     }
 
-    public async Task PlaceBetAsync(string email, int number, int points)
+    public async Task<BetProcessingResult> PlaceBetAsync(string email, int number, int points)
     {
+        var currentPoints = await _pointRepository.GetAsync(email);
+
+        if (currentPoints < points)
+        {
+            throw new GameValidationException($"Insufficient points. The current points: {currentPoints}", "Insufficient points");
+        }
+
         await _pointRepository.UpdateAsync(email, -points);
 
         _logger.LogInformation("The result of user '{Email}' bet placement: {Points}", email, points);
