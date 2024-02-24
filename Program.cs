@@ -56,9 +56,27 @@ static void addSwagger(WebApplicationBuilder builder)
             {
                 Title = "Gambling Games Api",
                 Version = "v1",
-                Description = "To start using the API, please register a new account, then login in. " +
-                "Please use the <b>Authorize</b> button to add JWT to each request you send to the API. " +
-                "Please note that the authorization key should be added in the format: <b>bearer <your-token></b>"
+                Description = @"
+    To start using the API:
+    1. Register a new account.
+    2. Login in. 
+    3. Use the ""Authorize"" button to add JWT to each request you send to the API. Please note that the authorization key should be added in the format: bearer <your-token>.
+
+    The API generates the error response in the following format:
+    
+    {
+        ""status"": 400,
+        ""traceId"": ""|2f3e3d4e-4c7e4b4e4c7e4b4e."",
+        ""errors"": {
+            ""Error Code 1"": [
+                ""Error description.""
+            ],
+            ""Error Code 2"": [
+                ""Error description.""
+            ]
+        }
+    }
+"
             });
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), includeControllerXmlComments: true);
