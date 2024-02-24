@@ -13,7 +13,7 @@ public class PointRepository : IPointRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddAsync(string email, int points)
+    public async Task UpdateAsync(string email, int points)
     {
         var point = await _dbContext.Points.FirstOrDefaultAsync(p => p.Email == email);
         if (point == null)

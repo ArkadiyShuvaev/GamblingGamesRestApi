@@ -1,4 +1,5 @@
-﻿using GamblingGamesRestApi.Infrastructure;
+﻿using GamblingGamesRestApi.Exceptions;
+using GamblingGamesRestApi.Infrastructure;
 using GamblingGamesRestApi.Repositories;
 using Microsoft.AspNetCore.Identity;
 
@@ -36,9 +37,20 @@ public class UserService : IUserService
 
         if (result.Succeeded)
         {
-            await _pointRepository.AddAsync(email, 10000);
+            await _pointRepository.UpdateAsync(email, 10000);
         }
 
         return result;
+    }
+
+    public async Task<ApplicationUser> GetAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            throw new NotFoundException($"User '{email}' cannot be found.");
+        }
+
+        return user;
     }
 }

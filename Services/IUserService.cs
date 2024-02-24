@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using GamblingGamesRestApi.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 namespace GamblingGamesRestApi.Services;
 
@@ -8,4 +9,9 @@ public interface IUserService
     /// Creates a new user for the given email and password.
     /// </summary>
     Task<IdentityResult> CreateAsync(string email, string password);
+
+    /// <summary>
+    /// Returns the user for the given email.
+    /// </summary>
+    Task<ApplicationUser> GetAsync(string email);
 }

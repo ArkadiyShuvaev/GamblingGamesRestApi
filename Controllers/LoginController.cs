@@ -2,6 +2,7 @@
  * This class demonstrates the approach with three layers: the controller, the service, and the repository.
  */
 
+using GamblingGamesRestApi.Exceptions;
 using GamblingGamesRestApi.Infrastructure;
 using GamblingGamesRestApi.Models;
 using GamblingGamesRestApi.Services;
@@ -81,11 +82,17 @@ public class LoginController : ControllerBase
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                var user = await _userService.GetAsync(model.Email);
                 var token = GenerateJwtToken(user);
+
                 return Ok(new LoginResponseModel { Token = token });
             }
 
+            return Forbid("The username or login is incorrect.");
+        }
+        catch (NotFoundException ex)
+        {
+            _logger.LogWarning(ex, "The user '{Email}' cannot be found.", model.Email);
             return Forbid("The username or login is incorrect.");
         }
         catch (Exception ex)

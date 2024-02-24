@@ -34,6 +34,7 @@ AddAutentication(builder);
 builder.Services.AddAuthentication().AddBearerToken();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBetService, BetService>();
 builder.Services.AddScoped<IPointRepository, PointRepository>();
 
 var app = builder.Build();
