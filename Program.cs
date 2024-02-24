@@ -1,5 +1,6 @@
 using GamblingGamesRestApi.Contexts;
 using GamblingGamesRestApi.Infrastructure;
+using GamblingGamesRestApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 AddAutentication(builder);
 
 builder.Services.AddAuthentication().AddBearerToken();
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

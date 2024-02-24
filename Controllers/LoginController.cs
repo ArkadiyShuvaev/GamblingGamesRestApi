@@ -1,5 +1,10 @@
-﻿using GamblingGamesRestApi.Infrastructure;
+﻿/*
+ * This class demonstrates the approach with three layers: the controller, the service, and the repository.
+ */
+
+using GamblingGamesRestApi.Infrastructure;
 using GamblingGamesRestApi.Models;
+using GamblingGamesRestApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +24,15 @@ namespace GamblingGamesRestApi.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserService _userService;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<LoginController> _logger;
 
-    public LoginController(UserManager<ApplicationUser> userManager,
+    public LoginController(IUserService userService,
         SignInManager<ApplicationUser> signInManager,
         ILogger<LoginController> logger)
     {
-        _userManager = userManager;
+        _userService = userService;
         _signInManager = signInManager;
         _logger = logger;
     }
@@ -43,8 +49,7 @@ public class LoginController : ControllerBase
     {
         try
         {
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Points = 10000 };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _userService.CreateAsync(model.Email, model.Password);
 
             if (result.Succeeded)
             {
