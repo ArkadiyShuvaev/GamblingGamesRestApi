@@ -1,8 +1,4 @@
-﻿/*
- * This class demonstrates the approach with three layers: the controller, the service, and the repository.
- */
-
-using GamblingGamesRestApi.Exceptions;
+﻿using GamblingGamesRestApi.Exceptions;
 using GamblingGamesRestApi.Infrastructure;
 using GamblingGamesRestApi.Models;
 using GamblingGamesRestApi.Services;
@@ -24,7 +20,6 @@ namespace GamblingGamesRestApi.Controllers;
 [AllowAnonymous]
 public class LoginController : ControllerBase
 {
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IUserService _userService;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<LoginController> _logger;
@@ -77,7 +72,7 @@ public class LoginController : ControllerBase
     {
         try
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
             _logger.LogInformation("The login result for the email '{Email}': {Result}", model.Email, result);
 
             if (result.Succeeded)
