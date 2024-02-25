@@ -21,15 +21,12 @@ namespace GamblingGamesRestApi.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<LoginController> _logger;
 
     public LoginController(IUserService userService,
-        SignInManager<ApplicationUser> signInManager,
         ILogger<LoginController> logger)
     {
         _userService = userService;
-        _signInManager = signInManager;
         _logger = logger;
     }
 
@@ -72,10 +69,10 @@ public class LoginController : ControllerBase
     {
         try
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
-            _logger.LogInformation("The login result for the email '{Email}': {Result}", model.Email, result);
+            var isPasswordCorrect = await _userService.CheckPasswordAsync(model.Email, model.Password);
+            _logger.LogInformation("The login result for the email '{Email}': {Result}", model.Email, isPasswordCorrect);
 
-            if (result.Succeeded)
+            if (isPasswordCorrect)
             {
                 var user = await _userService.GetAsync(model.Email);
                 var token = GenerateJwtToken(user);
@@ -83,12 +80,12 @@ public class LoginController : ControllerBase
                 return Ok(new LoginResponseModel { Token = token });
             }
 
-            return Forbid("The username or login is incorrect.");
+            return Unauthorized("The username or login is incorrect.");
         }
         catch (NotFoundException ex)
         {
             _logger.LogWarning(ex, "The user '{Email}' cannot be found.", model.Email);
-            return Forbid("The username or login is incorrect.");
+            return Unauthorized("The username or login is incorrect.");
         }
         catch (Exception ex)
         {

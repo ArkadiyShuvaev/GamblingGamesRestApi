@@ -10,11 +10,11 @@ namespace GamblingGamesRestApi.Services;
 /// </summary>
 public class UserService : IUserService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserManagerWrapper _userManager;
     private readonly IPointRepository _pointRepository;
     private readonly ILogger<UserService> _logger;
 
-    public UserService(UserManager<ApplicationUser> userManager,
+    public UserService(IUserManagerWrapper userManager,
         IPointRepository pointRepository,
         ILogger<UserService> logger)
     {
@@ -41,6 +41,12 @@ public class UserService : IUserService
         }
 
         return result;
+    }
+
+    public async Task<bool> CheckPasswordAsync(string email, string password)
+    {
+        var user = await GetAsync(email);
+        return await _userManager.CheckPasswordAsync(user, password);
     }
 
     public async Task<ApplicationUser> GetAsync(string email)

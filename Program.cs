@@ -19,9 +19,7 @@ addSwagger(builder);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationIdentityContext>(options => options.UseInMemoryDatabase("AppDb"));
-//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=tcp:127.0.0.1,1433;Database=AppDb;User ID=sa;Password=DevSqlS3rv3r$;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;Max Pool Size=500;"));
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("AppDb"));
-//builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=tcp:127.0.0.1,1433;Database=AppDb;User ID=sa;Password=DevSqlS3rv3r$;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;Max Pool Size=500;"));
 
 builder.Services.AddAuthorization();
 
@@ -36,6 +34,7 @@ builder.Services.AddAuthentication().AddBearerToken();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBetService, BetService>();
 builder.Services.AddScoped<IPointRepository, PointRepository>();
+builder.Services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

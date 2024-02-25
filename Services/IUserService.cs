@@ -5,6 +5,8 @@ namespace GamblingGamesRestApi.Services;
 
 public interface IUserService
 {
+    Task<bool> CheckPasswordAsync(string email, string password);
+
     /// <summary>
     /// Creates a new user for the given email and password.
     /// </summary>
