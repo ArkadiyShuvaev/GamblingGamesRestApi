@@ -10,13 +10,10 @@ namespace GamblingGamesRestApi.Services;
 public class BetService : IBetService
 {
     private readonly IPointRepository _pointRepository;
-    private readonly ILogger<BetService> _logger;
 
-    public BetService(IPointRepository pointRepository,
-               ILogger<BetService> logger)
+    public BetService(IPointRepository pointRepository)
     {
         _pointRepository = pointRepository;
-        _logger = logger;
     }
 
     public async Task<BetProcessingResult> PlaceBetAsync(string email, int number, int points)
