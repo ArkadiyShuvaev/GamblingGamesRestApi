@@ -1,7 +1,6 @@
 ﻿using GamblingGamesRestApi.Exceptions;
 using GamblingGamesRestApi.Models;
 using GamblingGamesRestApi.Repositories;
-using System.ComponentModel.DataAnnotations;
 
 namespace GamblingGamesRestApi.Services;
 

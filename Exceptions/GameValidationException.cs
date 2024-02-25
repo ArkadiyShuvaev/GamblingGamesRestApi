@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace GamblingGamesRestApi.Exceptions;
+﻿namespace GamblingGamesRestApi.Exceptions;
 
 /// <summary>
 /// Represents an exception that is thrown when a game validation fails.
