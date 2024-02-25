@@ -1,4 +1,6 @@
-﻿using GamblingGamesRestApi.Models;
+﻿using GamblingGamesRestApi.Exceptions;
+using GamblingGamesRestApi.Extensions;
+using GamblingGamesRestApi.Models;
 using GamblingGamesRestApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +28,12 @@ public class RandomNumberController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Places a bet on a number.
+    /// </summary>
+    /// <response code = "201">The bet has been placed.</response>
+    /// <response code = "400">The request is invalid.</response>
+    /// <response code = "500">An error occurred while processing the request.</response>
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
@@ -39,7 +47,12 @@ public class RandomNumberController : ControllerBase
 
             var betReqult = await _betService.PlaceBetAsync(email, betRequest.Number, betRequest.Points);
 
-            return StatusCode(StatusCodes.Status201Created);
+            return StatusCode(StatusCodes.Status201Created, betReqult);
+        }
+        catch (GameValidationException ex)
+        {
+            _logger.LogWarning(ex, "An error occurred while placing a bet: {Error}.", ex.Message);
+            return ValidationProblem(new ValidationProblemDetails(ex.ToValidationDictionary()));
         }
         catch (Exception ex)
         {

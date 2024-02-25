@@ -13,7 +13,6 @@ public class PointEntity
     [Required]
     public string Email { get; set; }
 
-
     /// <summary>
     /// Gets or sets the number of points the player has.
     /// The player has a starting account of 10,000 points and can wager on a prediction that they will either win or lose.

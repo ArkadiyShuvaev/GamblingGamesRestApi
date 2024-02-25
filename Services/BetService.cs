@@ -24,13 +24,33 @@ public class BetService : IBetService
     {
         var currentPoints = await _pointRepository.GetAsync(email);
 
-        if (currentPoints < points)
+        if (currentPoints - points < 0)
         {
-            throw new GameValidationException($"Insufficient points. The current points: {currentPoints}", "Insufficient points");
+            throw new GameValidationException($"Total points on the balance: {currentPoints}", "Insufficient points");
+        }
+
+        var randomNumber = new Random().Next(0, 10);
+        if (number == randomNumber)
+        {
+            var wonPoints = points * 9;
+
+            await _pointRepository.UpdateAsync(email, currentPoints + wonPoints);
+            return new BetProcessingResult
+            {
+                Email = email,
+                Status = "won",
+                Points = $"+{wonPoints}",
+                PointsTotal = currentPoints + wonPoints
+            };
         }
 
         await _pointRepository.UpdateAsync(email, -points);
-
-        _logger.LogInformation("The result of user '{Email}' bet placement: {Points}", email, points);
+        return new BetProcessingResult
+        {
+            Email = email,
+            Status = "lost",
+            Points = $"-{points}",
+            PointsTotal = currentPoints - points
+        };
     }
 }
