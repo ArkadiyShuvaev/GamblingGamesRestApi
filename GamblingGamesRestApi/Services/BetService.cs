@@ -22,7 +22,7 @@ public class BetService : IBetService
 
         if (currentPoints - points < 0)
         {
-            throw new GameValidationException($"Total points on the balance: {currentPoints}", "Insufficient points");
+            throw new GameValidationException($"The number of the existing points is insufficient to start the game. Points on the balance: {currentPoints}", "Insufficient points");
         }
 
         var randomNumber = new Random().Next(0, 10);
