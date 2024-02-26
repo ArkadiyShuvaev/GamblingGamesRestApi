@@ -2,6 +2,7 @@ using GamblingGamesRestApi.Contexts;
 using GamblingGamesRestApi.Infrastructure;
 using GamblingGamesRestApi.Repositories;
 using GamblingGamesRestApi.Services;
+using GamblingGamesRestApi.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,15 @@ using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var environment = builder.Environment;
+builder.Configuration
+    .AddJsonFile("appsettings.json", false)
+    .AddJsonFile($"appsettings.{environment}.json", true)
+    .AddEnvironmentVariables();
+
+var settings = builder.Configuration.Get<ServiceSettings>();
+builder.Services.AddSingleton<ServiceSettings>(settings);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -27,7 +37,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationIdentityContext>()
     .AddDefaultTokenProviders();
 
-AddAutentication(builder);
+AddAutentication(builder, settings);
 
 builder.Services.AddAuthentication().AddBearerToken();
 
@@ -116,10 +126,9 @@ static void addSwagger(WebApplicationBuilder builder)
     });
 }
 
-static void AddAutentication(WebApplicationBuilder builder)
+static void AddAutentication(WebApplicationBuilder builder, ServiceSettings settings)
 {
-    // TODO move the key to appsettings.json
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Gambling-Games-Rest-Api-Key-Super-Key"));
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.JwtKey));
     builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

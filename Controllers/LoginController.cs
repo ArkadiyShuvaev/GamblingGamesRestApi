@@ -1,6 +1,7 @@
 ﻿using GamblingGamesRestApi.Exceptions;
 using GamblingGamesRestApi.Models;
 using GamblingGamesRestApi.Services;
+using GamblingGamesRestApi.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,15 @@ namespace GamblingGamesRestApi.Controllers;
 public class LoginController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ServiceSettings _settings;
     private readonly ILogger<LoginController> _logger;
 
     public LoginController(IUserService userService,
+        ServiceSettings settings,
         ILogger<LoginController> logger)
     {
         _userService = userService;
+        _settings = settings;
         _logger = logger;
     }
 
@@ -112,8 +116,7 @@ public class LoginController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
-        // TODO move the key to appsettings.json
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Gambling-Games-Rest-Api-Key-Super-Key"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.JwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expires = DateTime.Now.AddHours(1);
 
