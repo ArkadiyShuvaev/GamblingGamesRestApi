@@ -27,6 +27,7 @@ public class UserService : IUserService
     {
         var user = new ApplicationUser
         {
+            // we do not need to normalize the email address because the database is case insensitive
             UserName = email,
             Email = email,
             CreatedAt = DateTime.Now
