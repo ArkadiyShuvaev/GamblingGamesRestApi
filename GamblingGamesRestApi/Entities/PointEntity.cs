@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GamblingGamesRestApi.Entities;
 
 [Table("Point")]
-[Index(nameof(Email), IsUnique = true)]
 public class PointEntity
 {
     [Key]
     [MaxLength(255)]
     [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public string Email { get; set; }
 
     /// <summary>
