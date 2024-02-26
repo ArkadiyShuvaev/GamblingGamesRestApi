@@ -1,5 +1,4 @@
 ﻿using GamblingGamesRestApi.Exceptions;
-using GamblingGamesRestApi.Infrastructure;
 using GamblingGamesRestApi.Models;
 using GamblingGamesRestApi.Services;
 using Microsoft.AspNetCore.Authorization;
