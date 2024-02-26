@@ -9,5 +9,8 @@ public class ApplicationDbContext : DbContext
         base(options)
     { }
 
+    /// <summary>
+    /// Gets or sets a collection of user points.
+    /// </summary>
     public DbSet<PointEntity> Points { get; set; }
 }
