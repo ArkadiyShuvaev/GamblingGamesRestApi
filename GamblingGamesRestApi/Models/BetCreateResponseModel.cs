@@ -1,9 +1,9 @@
 ﻿namespace GamblingGamesRestApi.Models;
 
 /// <summary>
-/// Represents the result of a bet processing.
+/// Represents the result of the bet create request.
 /// </summary>
-public class BetProcessingResult
+public class BetCreateResponseModel
 {
     public string Email { get; set; }
 

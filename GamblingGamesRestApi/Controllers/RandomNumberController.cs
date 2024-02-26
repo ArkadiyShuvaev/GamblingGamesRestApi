@@ -38,14 +38,14 @@ public class RandomNumberController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post([FromBody] BetRequest betRequest)
+    public async Task<IActionResult> Post([FromBody] BetCreateRequestModel requiest)
     {
         try
         {
             var email = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            _logger.LogInformation("The request to place a bet: {BetRequest}, email: {Email}.", betRequest, email);
+            _logger.LogInformation("The request to place a bet: {BetRequest}, email: {Email}.", requiest, email);
 
-            var betReqult = await _betService.PlaceBetAsync(email, betRequest.Number, betRequest.Points);
+            var betReqult = await _betService.PlaceBetAsync(email, requiest.Number, requiest.Points);
 
             return StatusCode(StatusCodes.Status201Created, betReqult);
         }

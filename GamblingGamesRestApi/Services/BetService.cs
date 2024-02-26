@@ -16,13 +16,14 @@ public class BetService : IBetService
         _pointRepository = pointRepository;
     }
 
-    public async Task<BetProcessingResult> PlaceBetAsync(string email, int number, int points)
+    public async Task<BetCreateResponseModel> PlaceBetAsync(string email, int number, int points)
     {
         var currentPoints = await _pointRepository.GetAsync(email);
 
         if (currentPoints - points < 0)
         {
-            throw new GameValidationException($"The number of the existing points is insufficient to start the game. Points on the balance: {currentPoints}", "Insufficient points");
+            throw new GameValidationException($"The number of the existing points is insufficient to start the game. " +
+                $"Points on the balance: {currentPoints}", "Insufficient points");
         }
 
         var randomNumber = new Random().Next(0, 10);
@@ -31,7 +32,7 @@ public class BetService : IBetService
             var wonPoints = points * 9;
 
             await _pointRepository.UpdateAsync(email, currentPoints + wonPoints);
-            return new BetProcessingResult
+            return new BetCreateResponseModel
             {
                 Email = email,
                 Status = "won",
@@ -41,7 +42,7 @@ public class BetService : IBetService
         }
 
         await _pointRepository.UpdateAsync(email, -points);
-        return new BetProcessingResult
+        return new BetCreateResponseModel
         {
             Email = email,
             Status = "lost",

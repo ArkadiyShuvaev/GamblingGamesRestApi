@@ -5,7 +5,7 @@ namespace GamblingGamesRestApi.Models;
 /// <summary>
 /// Represents a request to place a bet.
 /// </summary>
-public class BetRequest
+public class BetCreateRequestModel
 {
     [Required]
     [Range(0, 9)]
