@@ -7,10 +7,16 @@ namespace GamblingGamesRestApi.Models;
 /// </summary>
 public class BetCreateRequestModel
 {
+    /// <summary>
+    /// Gets or sets the number for the prediction.
+    /// </summary>
     [Required]
     [Range(0, 9)]
     public int Number { get; set; }
 
+    /// <summary>
+    /// The number of points is used for the number prediction.
+    /// </summary>
     [Required]
     [Range(1, int.MaxValue)]
     public int Points { get; set; }

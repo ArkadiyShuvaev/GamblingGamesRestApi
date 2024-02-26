@@ -5,7 +5,7 @@ namespace GamblingGamesRestApi.Models;
 public class RegisterRequestModel
 {
     /// <summary>
-    /// Gets or sets the email of the user.
+    /// Gets or sets the email of the new user.
     /// </summary>
     [Required]
     [EmailAddress]
@@ -13,7 +13,7 @@ public class RegisterRequestModel
     public string Email { get; set; }
 
     /// <summary>
-    /// Gets or sets the password of the user.
+    /// Gets or sets the password of the new user.
     /// </summary>
     /// <example>P@ssw0rd!</example>
     [Required]
