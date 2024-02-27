@@ -7,22 +7,22 @@ namespace GamblingGamesRestApi.Services;
 /// <summary>
 /// Represents members to place a bet.
 /// </summary>
-public class BetService : IBetService
+public class RandomNumberService : IRandomNumberService
 {
     private readonly IPointRepository _pointRepository;
 
-    public BetService(IPointRepository pointRepository)
+    public RandomNumberService(IPointRepository pointRepository)
     {
         _pointRepository = pointRepository;
     }
 
-    public async Task<BetCreateResponseModel> PlaceBetAsync(string email, int number, int points)
+    public async Task<RandomNumberResponseModel> CreateAsync(string email, int number, int points)
     {
         var currentPoints = await _pointRepository.GetAsync(email);
 
         if (currentPoints - points < 0)
         {
-            throw new GameValidationException($"The number of the existing points is insufficient to start the game. " +
+            throw new GameValidationException("The number of points is insufficient to start the game. " +
                 $"Points on the balance: {currentPoints}", "Insufficient points");
         }
 
@@ -32,7 +32,7 @@ public class BetService : IBetService
             var wonPoints = points * 9;
 
             await _pointRepository.UpdateAsync(email, currentPoints + wonPoints);
-            return new BetCreateResponseModel
+            return new RandomNumberResponseModel
             {
                 Email = email,
                 Status = "won",
@@ -42,7 +42,7 @@ public class BetService : IBetService
         }
 
         await _pointRepository.UpdateAsync(email, -points);
-        return new BetCreateResponseModel
+        return new RandomNumberResponseModel
         {
             Email = email,
             Status = "lost",

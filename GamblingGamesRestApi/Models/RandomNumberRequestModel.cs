@@ -5,17 +5,17 @@ namespace GamblingGamesRestApi.Models;
 /// <summary>
 /// Represents a request to place a bet.
 /// </summary>
-public class BetCreateRequestModel
+public class RandomNumberRequestModel
 {
     /// <summary>
-    /// Gets or sets the number for the prediction.
+    /// Gets or sets the number to predict.
     /// </summary>
     [Required]
     [Range(0, 9)]
     public int Number { get; set; }
 
     /// <summary>
-    /// The number of points is used for the number prediction.
+    /// The number of points is used to predict the number.
     /// </summary>
     [Required]
     [Range(1, int.MaxValue)]

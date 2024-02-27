@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents the result of the bet create request.
 /// </summary>
-public class BetCreateResponseModel
+public class RandomNumberResponseModel
 {
     public string Email { get; set; }
 

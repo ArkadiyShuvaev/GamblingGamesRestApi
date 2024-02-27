@@ -18,13 +18,13 @@ namespace GamblingGamesRestApi.Controllers;
 [Produces("application/json")]
 public class RandomNumberController : ControllerBase
 {
-    private readonly IBetService _betService;
+    private readonly IRandomNumberService _randomNumberService;
     private readonly ILogger<RandomNumberController> _logger;
 
-    public RandomNumberController(IBetService betService,
+    public RandomNumberController(IRandomNumberService randomNumberService,
         ILogger<RandomNumberController> logger)
     {
-        _betService = betService;
+        _randomNumberService = randomNumberService;
         _logger = logger;
     }
 
@@ -38,14 +38,14 @@ public class RandomNumberController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(Dictionary<string, string[]>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post([FromBody] BetCreateRequestModel requiest)
+    public async Task<IActionResult> Post([FromBody] RandomNumberRequestModel requiest)
     {
         try
         {
             var email = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             _logger.LogInformation("The request to place a bet: {BetRequest}, email: {Email}.", requiest, email);
 
-            var betReqult = await _betService.PlaceBetAsync(email, requiest.Number, requiest.Points);
+            var betReqult = await _randomNumberService.CreateAsync(email, requiest.Number, requiest.Points);
 
             return StatusCode(StatusCodes.Status201Created, betReqult);
         }

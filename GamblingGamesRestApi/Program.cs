@@ -42,7 +42,7 @@ AddAutentication(builder, settings);
 builder.Services.AddAuthentication().AddBearerToken();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IBetService, BetService>();
+builder.Services.AddScoped<IRandomNumberService, RandomNumberService>();
 builder.Services.AddScoped<IPointRepository, PointRepository>();
 builder.Services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
 
